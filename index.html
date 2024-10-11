@@ -1,0 +1,85 @@
+<html>
+    <head>
+      <script>
+
+          function onload(){
+            getimginfo();
+          }
+          
+          //Image Layout
+          const elem = "<div class='responsive'>"+
+                       "<div class='gallery'>"+
+                       "<a target='_blank' href='imagepath'>"+
+                       "<img class='img' src='imagepath' alt='Cinque Terre'>"+
+                       "</a>"+
+                       "<div class='desc'>imagedesc</div>"+
+                       "</div>"+
+                       "</div>";
+
+          //Load Image Data to Page
+          function getimginfo(){
+            fetch("Images.txt")
+              .then((res) => res.text())
+              .then((text) => {
+                console.log(text);
+
+                var ImageInfo = JSON.parse(text);
+                var imgobj = "";
+
+                for (var i=0;i<ImageInfo.Images.length;i++){
+                  var telem=elem.replaceAll("imagepath",ImageInfo.Images[i].ImagePath).replaceAll("imagedesc",ImageInfo.Images[i].ImageDescription);
+                  imgobj+=telem;
+                }            
+              
+                document.getElementById("imagecontainer").innerHTML=imgobj;
+
+            }).catch((e) => console.error(e));
+          }
+
+      </script>
+		  <style>
+
+        div.gallery {
+          border: 1px solid #ccc;
+        }
+        div.gallery:hover {
+          border: 1px solid #777;
+        }
+        div.gallery img {
+          width: 200px;
+          height: 200px;
+        }
+        div.desc {
+          padding: 15px;
+          text-align: center;
+        }
+      * {
+          box-sizing: border-box;
+        }
+        .responsive {
+          padding: 6 6px;
+          float: left;
+        }
+        @media only screen and (max-width: 600px) {
+          .responsive {
+            margin: 6px 0;
+          }
+        }
+        @media only screen and (max-width: 500px) {
+          .responsive {
+            width: 200px;
+          }
+        }
+        .clearfix:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+		  </style>
+
+    </head>
+    <body onload="onload()">
+        <div id="imagecontainer"></div>
+    </body>
+</html>
